@@ -27,7 +27,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-jkglz#v9@idwj(^!68^bf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '').split(',') if host.strip()] if os.environ.get('ALLOWED_HOSTS') else []
+# ALLOWED_HOSTS configuration
+ALLOWED_HOSTS = []
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '').split(',') if host.strip()]
+elif not DEBUG:
+    # In production, allow Render domains if ALLOWED_HOSTS is not set
+    ALLOWED_HOSTS = ['.onrender.com']
 
 
 # Application definition
