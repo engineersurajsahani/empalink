@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: empalink-webapp
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn empalink.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: empalink.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: WEB_CONCURRENCY
+        value: 4
