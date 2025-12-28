@@ -1,0 +1,282 @@
+/* Custom styles for Empalink */
+
+/* Animation and transition classes */
+.animated {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+.fade-in {
+    animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Gradient backgrounds */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%) !important;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%) !important;
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%) !important;
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%) !important;
+}
+
+/* Card enhancements */
+.card {
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.card .card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Dashboard stats */
+.stat-card {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4361ee;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Form enhancements */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    border-color: #4361ee;
+}
+
+/* Button variants */
+.btn-primary {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(67, 97, 238, 0.3), 0 4px 6px -2px rgba(67, 97, 238, 0.1);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    border: none;
+    font-weight: 600;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.3), 0 4px 6px -2px rgba(34, 197, 94, 0.1);
+}
+
+/* Story cards */
+.story-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.story-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.story-card .card-footer {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Profile enhancements */
+.profile-header {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    color: white;
+    padding: 3rem 0;
+    border-radius: 1rem 1rem 0 0;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border: 5px solid white;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Table enhancements */
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.table th {
+    border-top: none;
+    border-bottom: 2px solid #e2e8f0;
+    font-weight: 600;
+    color: #334155;
+}
+
+.table td {
+    border-top: 1px solid #e2e8f0;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(67, 97, 238, 0.05);
+}
+
+/* Badge enhancements */
+.badge {
+    padding: 0.5em 0.75em;
+    font-size: 0.75em;
+    font-weight: 500;
+}
+
+/* Progress bar enhancements */
+.progress {
+    height: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #e2e8f0;
+}
+
+.progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+/* Breadcrumb enhancements */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: #94a3b8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .jumbotron {
+        padding: 2rem 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .profile-header {
+        padding: 2rem 0;
+        margin: -1rem -1rem 1rem -1rem;
+    }
+    
+    .profile-image {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Utility classes */
+.text-gradient {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-lg {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Animation for loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

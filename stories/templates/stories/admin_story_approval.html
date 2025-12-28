@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Story Approval{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header py-4 bg-gradient-primary text-white rounded-top-3 border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 class="mb-0 fw-bold"><i class="fas fa-check-circle me-2"></i>Story Approval</h3>
+                            <p class="mb-0 text-white-75">Review and approve pending stories</p>
+                        </div>
+                        <div>
+                            <span class="badge bg-white text-primary fs-5 px-4 py-2">
+                                <i class="fas fa-book me-2"></i>{{ pending_stories|length }} Pending
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-5">
+                    {% if pending_stories %}
+                        <div class="row g-4">
+                            {% for story in pending_stories %}
+                            <div class="col-lg-6">
+                                <div class="card story-card hover-lift">
+                                    {% if story.images %}
+                                        <img src="{{ story.images.url }}" class="card-img-top" alt="{{ story.title }}" style="height: 200px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                            <i class="fas fa-image text-muted fa-3x"></i>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <span class="badge bg-warning bg-gradient">{{ story.get_status_display }}</span>
+                                            <small class="text-muted">Created: {{ story.created_at|date:"M d, Y" }}</small>
+                                        </div>
+                                        
+                                        <h5 class="card-title fw-bold">{{ story.title }}</h5>
+                                        <p class="card-text text-muted flex-grow-1">{{ story.description|truncatewords:20 }}</p>
+                                        
+                                        <div class="mt-auto">
+                                            <p class="text-muted mb-3">
+                                                <i class="fas fa-user me-2"></i>By {{ story.creator.get_full_name|default:story.creator.username }}
+                                            </p>
+                                            
+                                            <div class="d-grid gap-2">
+                                                <a href="{% url 'approve_story' story.id %}" class="btn btn-primary">
+                                                    <i class="fas fa-clipboard-check me-2"></i>Review & Approve/Reject
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                            <h5 class="text-muted">No pending stories to review</h5>
+                            <p class="text-muted mb-0">All stories have been reviewed and approved</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

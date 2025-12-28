@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ story.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home me-1"></i>Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'story_list' %}">Stories</a></li>
+            <li class="breadcrumb-item active">{{ story.title }}</li>
+        </ol>
+    </nav>
+    
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-5">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary bg-gradient fs-6 px-4 py-2">
+                            {{ story.category.name }}
+                        </span>
+                        <span class="badge bg-{% if story.status == 'approved' %}success{% elif story.status == 'pending' %}warning{% else %}danger{% endif %} bg-gradient fs-6 px-4 py-2">
+                            {{ story.get_status_display }}
+                        </span>
+                    </div>
+                    
+                    <h1 class="fw-bold mb-4">{{ story.title }}</h1>
+                    
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="fas fa-user-circle text-muted me-2"></i>
+                        <span class="me-3">By {{ story.creator.get_full_name|default:story.creator.username }}</span>
+                        <i class="fas fa-calendar text-muted me-2"></i>
+                        <span>{{ story.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    
+                    {% if story.images %}
+                        <div class="mb-5 rounded-3 overflow-hidden">
+                            <img src="{{ story.images.url }}" class="img-fluid w-100" alt="{{ story.title }}" style="max-height: 400px; object-fit: cover;">
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mb-5">
+                        <h3 class="mb-4 fw-bold text-primary">Description</h3>
+                        <p class="lead">{{ story.description }}</p>
+                    </div>
+                    
+                    {% if story.supporting_documents %}
+                        <div class="alert alert-info rounded-3 p-4">
+                            <h5 class="alert-heading mb-3"><i class="fas fa-file-alt me-2"></i>Supporting Documents</h5>
+                            <a href="{{ story.supporting_documents.url }}" target="_blank" class="btn btn-outline-primary">
+                                <i class="fas fa-download me-2"></i>Download Document
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm sticky-top">
+                <div class="card-header py-4 bg-gradient-primary text-white border-0">
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-donate me-2"></i>Donation Goal</h4>
+                </div>
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h3 class="text-primary mb-1 fw-bold">${{ story.collected_amount }}</h3>
+                        <p class="text-muted mb-1">of ${{ story.required_amount }} goal</p>
+                        <p class="mb-0 text-success fw-bold">{{ story.progress_percentage }}% funded</p>
+                    </div>
+                    
+                    <div class="progress mb-4" style="height: 12px;">
+                        <div class="progress-bar bg-gradient-primary" role="progressbar" style="width: {{ story.progress_percentage }}%" aria-valuenow="{{ story.progress_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    
+                    <div class="d-grid gap-3 mb-4">
+                        {% if user.is_authenticated and user.role == 'donor' %}
+                            <a href="{% url 'make_donation' story.id %}" class="btn btn-success btn-lg py-3 fw-bold">
+                                <i class="fas fa-hand-holding-usd me-2"></i>Make Donation
+                            </a>
+                        {% elif user.is_authenticated %}
+                            <a href="{% url 'make_donation' story.id %}" class="btn btn-success btn-lg py-3 fw-bold">
+                                <i class="fas fa-hand-holding-usd me-2"></i>Make Donation
+                            </a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-success btn-lg py-3 fw-bold">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login to Donate
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3 fw-bold text-primary">Story Details</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2">
+                                    <i class="fas fa-calendar text-muted me-2"></i>
+                                    <strong>Created:</strong> {{ story.created_at|date:"M d, Y" }}
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2">
+                                    <i class="fas fa-user text-muted me-2"></i>
+                                    <strong>Creator:</strong> {{ story.creator.get_full_name|default:story.creator.username }}
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2">
+                                    <i class="fas fa-dollar-sign text-muted me-2"></i>
+                                    <strong>Required Amount:</strong> ${{ story.required_amount }}
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2">
+                                    <i class="fas fa-piggy-bank text-muted me-2"></i>
+                                    <strong>Collected:</strong> ${{ story.collected_amount }}
+                                </li>
+                                <li class="list-group-item bg-transparent border-0 px-0 py-2">
+                                    <i class="fas fa-money-bill-wave text-muted me-2"></i>
+                                    <strong>Remaining:</strong> ${{ story.remaining_amount }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

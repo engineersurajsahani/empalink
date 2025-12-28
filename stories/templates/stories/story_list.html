@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}Stories{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-gradient-primary text-white rounded-4 p-5">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="mb-2 fw-bold">Stories</h1>
+                        <p class="mb-0 opacity-75">Find meaningful causes to support and make a difference</p>
+                    </div>
+                    <div class="text-end">
+                        <i class="fas fa-book-open fa-5x opacity-25"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search and Filter Section -->
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-3 mb-lg-0">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="get" class="d-flex">
+                        <input class="form-control me-2" type="search" name="q" placeholder="Search stories..." value="{{ request.GET.q }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="get" class="d-flex">
+                        <select name="category" class="form-select me-2" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                                <option value="{{ category.name }}" {% if request.GET.category == category.name %}selected{% endif %}>{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="q" value="{{ request.GET.q }}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stories Grid -->
+    <div class="row g-4">
+        {% if page_obj %}
+            {% for story in page_obj %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card story-card hover-lift">
+                    {% if story.images %}
+                        <img src="{{ story.images.url }}" class="card-img-top" alt="{{ story.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-image text-muted fa-3x"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-primary bg-gradient">{{ story.category.name }}</span>
+                            <span class="badge bg-{% if story.status == 'approved' %}success{% elif story.status == 'pending' %}warning{% else %}danger{% endif %}">{{ story.get_status_display }}</span>
+                        </div>
+                        
+                        <h5 class="card-title fw-bold">{{ story.title }}</h5>
+                        <p class="card-text text-muted flex-grow-1">{{ story.description|truncatewords:20 }}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between mb-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-dollar-sign me-1"></i>${{ story.collected_amount }} raised
+                                </small>
+                                <small class="text-muted">
+                                    <i class="fas fa-target me-1"></i>${{ story.required_amount }} goal
+                                </small>
+                            </div>
+                            
+                            <div class="progress mb-3" style="height: 10px;">
+                                <div class="progress-bar bg-gradient-primary" role="progressbar" style="width: {{ story.progress_percentage }}%" aria-valuenow="{{ story.progress_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ story.progress_percentage }}% funded</small>
+                                <a href="{% url 'story_detail' story.pk %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="card p-5 text-center">
+                    <i class="fas fa-inbox fa-3x text-muted mx-auto mb-3"></i>
+                    <h5 class="text-muted">No stories found</h5>
+                    <p class="text-muted">Try adjusting your search or filter criteria</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <nav aria-label="Stories pagination">
+                    <ul class="pagination justify-content-center flex-wrap">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                    <i class="fas fa-angle-double-left"></i> First
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                    Last <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

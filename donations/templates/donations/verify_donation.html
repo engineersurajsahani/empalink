@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Donation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-center py-4 bg-gradient-primary text-white rounded-top-3">
+                    <h3 class="mb-0 fw-bold"><i class="fas fa-clipboard-check me-2"></i>Verify Donation</h3>
+                    <p class="mb-0 text-white-75">Review and verify donation: #{{ donation.id }}</p>
+                </div>
+                
+                <div class="card-body p-5">
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <h6 class="text-muted fw-bold mb-1">DONOR</h6>
+                                        <p class="mb-0 fw-bold">{{ donation.donor.get_full_name|default:donation.donor.username }}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-muted fw-bold mb-1">STORY</h6>
+                                        <p class="mb-0">{{ donation.story.title }}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-muted fw-bold mb-1">AMOUNT</h6>
+                                        <p class="mb-0 fw-bold text-success">${{ donation.amount }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <h6 class="text-muted fw-bold mb-1">DATE</h6>
+                                        <p class="mb-0">{{ donation.donation_date|date:"M d, Y H:i" }}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-muted fw-bold mb-1">STATUS</h6>
+                                        <p class="mb-0">
+                                            <span class="badge bg-warning bg-gradient">
+                                                <i class="fas fa-clock me-1"></i>{{ donation.get_status_display }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-muted fw-bold mb-1">TRANSACTION ID</h6>
+                                        <p class="mb-0">{{ donation.transaction_id|default:"N/A" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h6 class="text-muted fw-bold mb-3">PAYMENT SCREENSHOT</h6>
+                                {% if donation.payment_screenshot %}
+                                    <div class="border rounded-3 p-2 bg-white">
+                                        <img src="{{ donation.payment_screenshot.url }}" class="img-fluid rounded" alt="Payment Screenshot" style="max-height: 300px; object-fit: contain;">
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning rounded-3 p-4">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-exclamation-triangle fa-2x me-3 text-warning"></i>
+                                            <p class="mb-0">No payment screenshot provided by donor.</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header py-4 bg-white border-0">
+                            <h4 class="mb-0 fw-bold"><i class="fas fa-tasks me-2"></i>Update Status</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" class="needs-validation" novalidate>
+                                {% csrf_token %}
+                                
+                                <div class="mb-4">
+                                    <label for="status" class="form-label fw-bold">Select Status</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="fas fa-cog"></i>
+                                        </span>
+                                        <select name="status" id="status" class="form-select">
+                                            <option value="confirmed">Confirm Donation</option>
+                                            <option value="rejected">Reject Donation</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-info rounded-3 p-4 mb-4">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-info-circle fa-2x me-3 text-info"></i>
+                                        <div>
+                                            <h5 class="alert-heading mb-2">Important Note</h5>
+                                            <p class="mb-0">Confirming the donation will update the story's collected amount and generate a receipt for the donor.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid gap-3">
+                                    <button type="submit" class="btn btn-success btn-lg py-3 fw-bold">
+                                        <i class="fas fa-check-circle me-2"></i>Update Status
+                                    </button>
+                                    <a href="{% url 'admin_donation_verification' %}" class="btn btn-outline-secondary btn-lg">
+                                        <i class="fas fa-arrow-left me-2"></i>Back to Verification
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
